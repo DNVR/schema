@@ -1,0 +1,22 @@
+{
+  "name": "@dnvr/schema",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DNVR/schema.git"
+  },
+  "author": "Denver Dias",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DNVR/schema/issues"
+  },
+  "homepage": "https://github.com/DNVR/schema#readme",
+  "devDependencies": {
+    "typescript": "^3.9.7"
+  }
+}
