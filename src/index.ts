@@ -34,9 +34,9 @@ function getConstructor ( entry ): Function | false {
   }
 }
 
-var matchTypes = function ( type, c ) {
+var matchTypes = function ( type: Function | Array<Function>, c: Function ) {
   try {
-    return ( c === type || -1 !== indexOf( type, c ) )
+    return ( c === type || -1 !== indexOf( type as Array<Function>, c ) )
   }
   catch ( e ) {
     return false
