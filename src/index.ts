@@ -1,3 +1,8 @@
+type Class = {
+  new(): any
+  prototype: any
+}
+
 const indexOf: ( haystack: Array< typeof needle >, needle: any ) => number = Function.call.bind( [ 0 ].indexOf ) as any
 const parse = JSON.parse
 const stringify = JSON.stringify
