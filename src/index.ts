@@ -76,12 +76,12 @@ const objectStandardisor = function ( out: StandardObject, properties: Array<any
   properties.forEach( objectStandardisationHelper, out )
 }
 
-const arrayStandardisationHelper = function ( this: Schema, member ) {
+const arrayStandardisationHelper = function ( this: Schema, member: any ) {
   this.standardise( member )
 }
 
-const arrayStandardisor = function ( out, members ) {
-  let schema = new Schema( members )
+const arrayStandardisor = function ( out: Array< any >, members: any ) {
+  let schema: Schema = new Schema( members )
   out.forEach( arrayStandardisationHelper, schema )
 }
 
