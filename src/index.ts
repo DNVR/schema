@@ -3,11 +3,11 @@ type Class = {
   prototype: any
 }
 
-const indexOf: ( haystack: Array< typeof needle >, needle: any ) => number = Function.call.bind( [ 0 ].indexOf ) as any
+const indexOf: ( haystack: Array<typeof needle>, needle: any ) => number = Function.call.bind( [ 0 ].indexOf ) as any
 const parse = JSON.parse
 const stringify = JSON.stringify
 
-var TYPES = function ( constructr ) {
+var TYPES = function () {
 
   var TYPES: {
     [ key: string ]: Function
@@ -25,12 +25,13 @@ var TYPES = function ( constructr ) {
     get ( target, name: string ) {
       return target[ name.toUpperCase() ]
     }
-  })
-}( 'constructor' )
+  } )
+
+}()
 
 function getConstructor ( entry: Object ): typeof Object
-function getConstructor ( entry: Array< any > ): typeof Array
-function getConstructor ( entry ): Function | false {
+function getConstructor ( entry: Array<any> ): typeof Array
+function getConstructor ( entry: Object | Array<any> ): Function | false {
   try {
     return entry.constructor
   }
@@ -56,7 +57,7 @@ const objectValidator = function ( entry, properties ): boolean {
   return properties.every( objectValidationHelper, entry )
 }
 
-const arrayValidationHelper = function ( member ) {
+const arrayValidationHelper = function ( this: Schema, member: any ) {
   return this.validate( member )
 }
 const arrayValidator = function ( entry, schema ): boolean {
@@ -64,10 +65,14 @@ const arrayValidator = function ( entry, schema ): boolean {
   return entry.every( arrayValidationHelper, arraySchema )
 }
 
-const objectStandardisationHelper: ( this, property: SchemaProperty ) => void = function ( property: SchemaProperty ) {
+interface StandardObject {
+  [ key: string ]: any
+}
+
+const objectStandardisationHelper: ( this: StandardObject, property: SchemaProperty ) => void = function ( property: SchemaProperty ) {
   this[ property.name ] = ( new Schema( property ) ).standardise( this[ property.name ] )
 }
-const objectStandardisor = function ( out, properties: Array< any > ) {
+const objectStandardisor = function ( out: StandardObject, properties: Array<any> ) {
   properties.forEach( objectStandardisationHelper, out )
 }
 
@@ -81,22 +86,22 @@ const arrayStandardisor = function ( out, members ) {
 }
 
 type SchemaType = {
-  type: Class | Array< Class >,
-  properties?: Array< SchemaProperty >,
-  members?: Class | Array< Class >,
+  type: Class | Array<Class>,
+  properties?: Array<SchemaProperty>,
+  members?: Class | Array<Class>,
   defacto?: any,
-  allowed?: Array< any >
+  allowed?: Array<any>
 }
 
 type SchemaProperty = SchemaType & { name: string }
 
 type SchemaMainType = {
-  type: Class | Array< Class >
+  type: Class | Array<Class>
 }
 
 type SchemaObject = {
   type: 'object',
-  properties: Array< SchemaPropertyObject >
+  properties: Array<SchemaPropertyObject>
 }
 type SchemaPropertyObject = SchemaObject & { name: string }
 
@@ -164,7 +169,7 @@ class Schema {
     }
     else {
       if ( this.schema.allowed instanceof TYPES.ARRAY ) {
-        if ( -1 === ( < Array< any > > this.schema.allowed ).indexOf( out ) ) {
+        if ( -1 === ( <Array<any>> this.schema.allowed ).indexOf( out ) ) {
           let val = this.schema.allowed[ 0 ]
           out = 'object' === typeof val ? parse( stringify( val ) ) : val
         }
