@@ -63,7 +63,7 @@ const objectValidator = function ( entry, properties: Array<any> ): boolean {
 const arrayValidationHelper = function ( this: Schema, member: any ) {
   return this.validate( member )
 }
-const arrayValidator = function ( entry, schema ): boolean {
+const arrayValidator = function ( entry: Array<any>, schema: SchemaType ): boolean {
   let arraySchema = new Schema( schema )
   return entry.every( arrayValidationHelper, arraySchema )
 }
