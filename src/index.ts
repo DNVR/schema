@@ -31,8 +31,11 @@ var TYPES = function () {
 
 function getConstructor ( entry: Object ): typeof Object
 function getConstructor ( entry: Array<any> ): typeof Array
-function getConstructor ( entry: Object | Array<any> ): Function | false {
+function getConstructor ( entry: undefined ): false
+function getConstructor ( entry: Object | Array<any> | undefined ): Function | false {
   try {
+    if ( entry === undefined ) return false
+
     return entry.constructor
   }
   catch ( e ) {
@@ -49,11 +52,11 @@ var matchTypes = function ( type: Function | Array<Function>, c: Function ) {
   }
 }
 
-const objectValidationHelper = function ( property ) {
+const objectValidationHelper = function ( this: any, property: SchemaProperty ) {
   let propertySchema = new Schema( property )
   return propertySchema.validate( this[ property.name ] )
 }
-const objectValidator = function ( entry, properties ): boolean {
+const objectValidator = function ( entry, properties: Array<any> ): boolean {
   return properties.every( objectValidationHelper, entry )
 }
 
@@ -80,7 +83,7 @@ const arrayStandardisationHelper = function ( this: Schema, member: any ) {
   this.standardise( member )
 }
 
-const arrayStandardisor = function ( out: Array< any >, members: any ) {
+const arrayStandardisor = function ( out: Array<any>, members: any ) {
   let schema: Schema = new Schema( members )
   out.forEach( arrayStandardisationHelper, schema )
 }
